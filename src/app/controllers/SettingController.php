@@ -12,14 +12,17 @@ class SettingController extends Controller
 
     }
     public function defaultAction(){
-        $postdata = $_POST ?? array();
+        // $postdata = $_POST ?? array();
         // echo "<pre>";
         // print_r($postdata);
 
         $request = new Request();
         $product = new Settings();
         $escaper = new Escaper();
-
+        // echo "<pre>";
+        // print_r($product);
+        // die;
+        
         $inputdata = array(
             "title" => $escaper->escapeHtml($this->request->getPost('title'),),
             "zipcode" => $escaper->escapeHtml($this->request->getPost('zipcode'),),
@@ -27,17 +30,30 @@ class SettingController extends Controller
             "stock" => $escaper->escapeHtml($this->request->getPost('stock'),)
 
         );
-
+        // echo "<pre>";
+        // print_r($inputdata);
+        // die;
         $product->assign(
-            $this->request->getPost(),
-                [
+            $inputdata,
+            [
                 'title',
                 'price',
                 'stock',
                 'zipcode'
-                ]
+            ]
         );
-        $product->save();
+        // echo "<pre>";
+        // print_r($product->title);
+        // die;
+        $sett = Settings::find();
+        // print_r($sett[0]->title);
+        // die;
+        $sett[0]->title = $inputdata['title'];
+        $sett[0]->price = $inputdata['price'];
+        $sett[0]->stock = $inputdata['stock'];
+        $sett[0]->zipcode = $inputdata['zipcode'];
+        // $sett[0]->title = $inputdata['title'];
+        $sett[0]->save();
         header('Location:http://localhost:8080/');
     }
 }
