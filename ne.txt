@@ -1,0 +1,31 @@
+$aclfile = APP_PATH . '/security/acl.cache';
+        if (true !== is_File($aclfile)) {
+
+            $acl = new Memory();
+            $acl->addRole('Admin');
+            $acl->addRole('Customer');
+            $acl->addRole('Guest');
+            $acl->addComponent(
+                'order',
+                [
+                    'add',
+                    'addhelper',
+                    'index'
+                ]
+            );
+
+            $acl->allow('Admin', 'order', 'add');
+
+            //  $acl->deny('Guest', 'order', '*');
+            $acl->allow('Guest', 'order', 'add');
+            $acl->allow('Admin');
+
+            file_put_contents(
+                $aclfile,
+                serialize($acl)
+            );
+        } else {
+            $acl = unserialize(
+                file_get_contents($aclfile)
+            );
+        }
