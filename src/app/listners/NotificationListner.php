@@ -41,7 +41,7 @@ Class NotificationListner extends Injectable
         $act=$this->router->getActionName();
         // echo "$act , $cont,$role";
         // die;
-           if($acl->isallowed($role,$cont,$act)){
+           if($acl->isAllowed("$role","$cont","$act")){
            }else{
             echo 'Access denied';
             // print_r($acl);

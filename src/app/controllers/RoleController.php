@@ -119,6 +119,8 @@ class RoleController extends Controller
             ]
             );
         $per->save();
+        echo "Saved";
+        die;
 
     }
     }
