@@ -61,21 +61,24 @@ $container->set(
         return $view;
     }
 );
-// $loader = new Loader();
 
-// $loader->registerDirs(
-//     [
-//         APP_PATH . "/controllers",
-//         APP_PATH . "/models/"
 
-//     ]
-//     );
-//     $loader->registerNamespaces(
-//         [
-//             'App\Components' => APP_PATH . "/components"
-//         ]
-//         );
-//     $loader->register();
+
+$loader = new Loader();
+
+$loader->registerDirs(
+    [
+        APP_PATH . "/controllers",
+        APP_PATH . "/models/"
+    ]);
+
+
+$loader->registerNamespaces(
+    [
+        'App\Listeners' => APP_PATH . '/listners'
+    ]
+    );
+    $loader->register();
 
 $container->set(
     'url',
@@ -113,6 +116,9 @@ $container->set(
 );
 $application = new Application($container);
 
+
+
+
 $container->set(
     'config',
     $config,
@@ -127,6 +133,12 @@ $eventsManager->attach(
     new MainListner()
    
 );
+// $eventManager->attach(
+//     'application:beforeHandRequest',
+//     new App\listners\NotificationListner()
+
+// );
+
 $container->set(
     'eventsManager',
     function () use($eventsManager) {
@@ -134,6 +146,13 @@ $container->set(
 
     }
 );
+
+$eventsManager->attach(
+    'application:beforeHandleRequest',
+    new App\Listeners\NotificationListner()
+);
+
+$application->setEventsManager($eventsManager);
 
 // $di->setShared(
 //     'session',
@@ -180,6 +199,8 @@ $container->set(
 //        return $cookies; 
 //     } 
 //  ); 
+
+
 
 try {
     // Handle the request
